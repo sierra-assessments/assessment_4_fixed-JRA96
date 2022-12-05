@@ -29,13 +29,16 @@ def categories(request):
     #
 
 
-@api_view(["PUT", "DELETE"])
+@api_view(["PUT", "DELETE", "GET"])
 def category(request, category_id):
     if request.method == 'PUT':
         print(request.data["title"])
         return JsonResponse({'success': True, 'title': request.data["title"]})
     elif request.method == 'DELETE':
         return JsonResponse({'success': True, 'id': category_id})
+    # if request.method == 'GET':
+    #     print(request.data["id"])
+    #     return JsonResponse({'success': True, 'title': request.data["title"]})
 
 
 @api_view([])
