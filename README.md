@@ -1,6 +1,9 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-c66648af7eb3fe8bc4f294546bfd86ef473780cde1dea487d3c4ff354943c9ae.svg)](https://classroom.github.com/online_ide?assignment_repo_id=9546743&assignment_repo_type=AssignmentRepo)
 # Project 4 - Your Forum - Django CRUD API
 
+## Submission Video Link
+https://drive.google.com/file/d/1F3rAj9pSCO7ZZUfowK6hmtgnu38YWWWD/view?usp=share_link
+
 ## Challenge
 
 You have many topics of interest (like music, art, sports, and that one movie with the dog) and you have strong opinions about all of them. And you are just sick and tired of not having a forum where you can debate these topics with someone other than yourself.
