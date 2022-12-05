@@ -22,6 +22,7 @@ def categories(request):
         all_categoriy_information = Category.objects.all().values()
         for item in all_categoriy_information:
             list_of_categories.append({'id': item['id'], 'title': item['title']},)
+        print(list_of_categories)
         return JsonResponse({'data': list_of_categories})
 
     elif request.method == 'POST':
@@ -70,8 +71,22 @@ def post(request, post_id):
 
 @api_view(["GET", "POST"])
 def category_posts(request, category_id):
+    if request.method == 'GET':
+        list_of_category_posts = Post.objects.filter(title = category_id)
+        post_content = []
+        for item in list_of_category_posts.all().values():
+            post_content.append({'id': item['id'], 'content': item['content']})
+        # print(list_of_category_posts.all().values())
+        # print(post_content)
+        return JsonResponse({'data': post_content})
+    
+    elif request.method == 'POST':
+        category = Category.objects.get(id= category_id)
+        print(category)
+        new_post = Post(title = category, content = request.data['content'])
+        new_post.save()
+        return JsonResponse({'success': True, 'id': category_id, 'content': request.data["content"]})
 
-    return JsonResponse({'success': True, 'id': category_id})
 
 
 @api_view(["GET"])
