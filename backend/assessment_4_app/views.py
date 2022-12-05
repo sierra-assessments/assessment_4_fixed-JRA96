@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from .models import Category, Post
+# import json
 
 
 def send_the_homepage(request):
@@ -24,39 +25,56 @@ def categories(request):
         return JsonResponse({'data': list_of_categories})
 
     elif request.method == 'POST':
-        print(request.data["title"])
-        return JsonResponse({'success': True, 'title': request.data["title"]})
+        new_category = Category(title=request.data['title'])
+        new_category.save()
+        return JsonResponse({'data': request.data})
     #
 
 
-@api_view(["PUT", "DELETE"])
+@api_view(["PUT", "DELETE", "GET"])
 def category(request, category_id):
+    """
+        GET: Returns a single 
+        PUT: Updates a single category
+        DELETE: Deletes a category
+    """
     if request.method == 'PUT':
-        print(request.data["title"])
-        return JsonResponse({'success': True, 'title': request.data["title"]})
+        Category.objects.filter(id= category_id).update(title = request.data['title'])
+        return JsonResponse({'success': True, 'id': category_id, 'title': request.data["title"]})
     elif request.method == 'DELETE':
+        Category.objects.filter(id= category_id).delete()
+        return JsonResponse({'success': True, 'id': category_id})
+    elif request.method == 'GET':
         return JsonResponse({'success': True, 'id': category_id})
 
 
-@api_view([])
+@api_view(["GET"])
 def posts(request):
 
-    pass
+    if request.method == 'GET':
+        list_of_posts = []
+        all_post_information = Post.objects.all().values()
+        print(all_post_information)
+        for item in all_post_information:
+            list_of_posts.append({'id': item['id'], 'title_id': item['title_id'], 'content': item['content']},)
+        return JsonResponse({'data': list_of_posts})
 
 
-@api_view([])
+@api_view(["GET", "PUT"])
 def post(request, post_id):
+    if request.method == 'PUT':
+        Post.objects.filter(id= post_id).update(content = request.data['content'])
+        return JsonResponse({'success': True, 'id': post_id})
+    return JsonResponse({'success': True, 'id': post_id})
 
-    pass
 
-
-@api_view([])
+@api_view(["GET", "POST"])
 def category_posts(request, category_id):
 
-    pass
+    return JsonResponse({'success': True, 'id': category_id})
 
 
-@api_view([])
+@api_view(["GET"])
 def category_post(request, category_id, post_id):
 
-    pass
+    return JsonResponse({'success': True, 'id': post_id})
