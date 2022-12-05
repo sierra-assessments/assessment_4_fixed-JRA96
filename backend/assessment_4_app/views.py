@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
+from .models import Category, Post
 
 
 def send_the_homepage(request):
@@ -16,11 +17,10 @@ def categories(request):
     """
 
     if request.method == 'GET':
-        list_of_categories = [
-            {'id': 1, 'title': 'Games'},
-            {'id': 2, 'title': 'Hobbies'},
-            {'id': 3, 'title': 'Movies'}
-        ]
+        list_of_categories = []
+        all_categoriy_information = Category.objects.all().values()
+        for item in all_categoriy_information:
+            list_of_categories.append({'id': item['id'], 'title': item['title']},)
         return JsonResponse({'data': list_of_categories})
 
     elif request.method == 'POST':
@@ -29,16 +29,13 @@ def categories(request):
     #
 
 
-@api_view(["PUT", "DELETE", "GET"])
+@api_view(["PUT", "DELETE"])
 def category(request, category_id):
     if request.method == 'PUT':
         print(request.data["title"])
         return JsonResponse({'success': True, 'title': request.data["title"]})
     elif request.method == 'DELETE':
         return JsonResponse({'success': True, 'id': category_id})
-    # if request.method == 'GET':
-    #     print(request.data["id"])
-    #     return JsonResponse({'success': True, 'title': request.data["title"]})
 
 
 @api_view([])
