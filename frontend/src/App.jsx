@@ -1,6 +1,17 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import axios from 'axios'
+import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import NavBar from 'react-bootstrap/NavBar'
+import Nav from 'react-bootstrap/Nav'
+import HomePage from './components/HomePage'
+import CategoriesPage from './components/CategoriesPage'
+import PostsPage from './components/PostsPage'
+import CategoryPage from './components/CategoryPage';
+import PostPage from './components/PostPage';
+import CategoryPosts from './components/CategoryPosts'
+import CategorySinglePost from './components/CategorySinglePost';
 
 
 function App() {
@@ -29,14 +40,14 @@ function App() {
 
 
  function getAllCategories(){
-  axios.get('categories/').then(response =>{
+  axios.get('api/categories/').then(response =>{
     let data = response.data.data
     setCategories(data)
   } )
     
   }
   function createCategory( ){
-    axios.post('categories/' , {'title': titleInput})
+    axios.post('api/categories/' , {'title': titleInput})
     .then( response => {
       console.log(response.data)
     }).then(
@@ -45,7 +56,7 @@ function App() {
     
   }
   function updateCategory( id ){
-    axios.put('categories/'+id+'/' , {'title': titleInput})
+    axios.put('api/categories/'+id+'/' , {'title': titleInput})
     .then( response => {
       console.log(response.data)
     }).then(
@@ -54,7 +65,7 @@ function App() {
     
   }
   function deleteCategory( id){
-    axios.delete('categories/'+id+'/' )
+    axios.delete('api/categories/'+id+'/' )
     .then( response => {
       console.log(response.data)
     }).then(
@@ -71,50 +82,31 @@ function App() {
 
   return (
 
-    <div className='App'>
-      <div style={{border: '3px solid black'}}>
-        <h2>All Categories</h2>
-        <hr/>
-        {categories && categories.map(category => {
-                    return <h3 onClick={()=>{}}>{category.title}</h3>
-                  })
-                }
-      </div>
-      
-      <div style={{border: '3px solid black'}}>
+    
 
-            <h3>Add a category</h3>
-            
-            <div>  
-              <label> 
-                Title
-                  <input 
-                      type='text'
-                      placeholder='title'
-                      value={titleInput} 
-                      onChange={(event)=>{setTitleInput(event.target.value)}}
-                      />
-                          
-              </label>
-              <button onClick={()=>{createCategory()}}> add new category</button>
-            </div>
-        </div>
-        <hr/>
-        <div style={{border: '3px solid black'}}>
-        <h2>update category</h2>
-        <hr/>
-        {categories && categories.map(category => {
-                    return <div>
-                    <input type='text'
-                      placeholder={category.title}
-                      value={titleInput} 
-                      onChange={(event)=>{setTitleInput(event.target.value)}}/>
-                    <button onClick={() => updateCategory(category.id)}>update</button>
-                    <button onClick={() => deleteCategory(category.id)}>delete</button>
-                    </div>
-                  })
-                }
-      </div>
+    <div className='App'>
+      
+      <Router>
+
+      <NavBar bg='dark' variant='light'>
+        <Link to='/'> Home </Link>
+        <Link to='/categories'> Categories </Link>
+        <Link to='/posts'> Posts </Link>
+      </NavBar>
+      
+      <h1>CodePlatoon Discussion!</h1>
+
+       <Routes>
+         <Route path=''  element= {<HomePage/>}/>
+         <Route path='categories/'  element= {<CategoriesPage/>}/>
+         <Route path='posts/'  element= {<PostsPage/>}/>
+         <Route path='categories/:id' element= {<CategoryPage/>}/>
+         <Route path='posts/:id' element= {<PostPage/>}/>
+         <Route path='categories/:id/posts' element= {<CategoryPosts/>}/>
+         <Route path='categories/:id/posts/:id' element= {<CategorySinglePost/>}/>
+       </Routes>
+     </Router> 
+    
 
     </div>
 
